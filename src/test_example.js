@@ -83,8 +83,8 @@ var quit_ = (status, toThrow) => {
 // Determine the runtime environment we are in. You can customize this by
 // setting the ENVIRONMENT setting at compile time (see settings.js).
 
-var ENVIRONMENT_IS_WEB = true;
-var ENVIRONMENT_IS_WORKER = false;
+var ENVIRONMENT_IS_WEB = false;
+var ENVIRONMENT_IS_WORKER = true;
 var ENVIRONMENT_IS_NODE = false;
 var ENVIRONMENT_IS_SHELL = false;
 
@@ -341,7 +341,7 @@ var WORKERFS = 'WORKERFS is no longer included by default; build with -lworkerfs
 var NODEFS = 'NODEFS is no longer included by default; build with -lnodefs.js';
 
 
-assert(!ENVIRONMENT_IS_WORKER, "worker environment detected but not enabled at build time.  Add 'worker' to `-s ENVIRONMENT` to enable.");
+assert(!ENVIRONMENT_IS_WEB, "web environment detected but not enabled at build time.  Add 'web' to `-s ENVIRONMENT` to enable.");
 
 assert(!ENVIRONMENT_IS_NODE, "node environment detected but not enabled at build time.  Add 'node' to `-s ENVIRONMENT` to enable.");
 
@@ -1500,13 +1500,13 @@ function createExportWrapper(name, fixedasm) {
 
 var wasmBinaryFile;
 if (Module['locateFile']) {
-  wasmBinaryFile = 'quick_example.wasm';
+  wasmBinaryFile = 'test_example.wasm';
   if (!isDataURI(wasmBinaryFile)) {
     wasmBinaryFile = locateFile(wasmBinaryFile);
   }
 } else {
   // Use bundler-friendly `new URL(..., import.meta.url)` pattern; works in browsers too.
-  wasmBinaryFile = new URL('quick_example.wasm', import.meta.url).toString();
+  wasmBinaryFile = new URL('test_example.wasm', import.meta.url).toString();
 }
 
 function getBinary(file) {
@@ -7292,6 +7292,64 @@ if (Module['preInit']) {
 }
 
 run();
+
+var workerResponded = false, workerCallbackId = -1;
+
+(function() {
+  var messageBuffer = null, buffer = 0, bufferSize = 0;
+
+  function flushMessages() {
+    if (!messageBuffer) return;
+    if (runtimeInitialized) {
+      var temp = messageBuffer;
+      messageBuffer = null;
+      temp.forEach(function(message) {
+        onmessage(message);
+      });
+    }
+  }
+
+  function messageResender() {
+    flushMessages();
+    if (messageBuffer) {
+      setTimeout(messageResender, 100); // still more to do
+    }
+  }
+
+  onmessage = (msg) => {
+    // if main has not yet been called (mem init file, other async things), buffer messages
+    if (!runtimeInitialized) {
+      if (!messageBuffer) {
+        messageBuffer = [];
+        setTimeout(messageResender, 100);
+      }
+      messageBuffer.push(msg);
+      return;
+    }
+    flushMessages();
+
+    var func = Module['_' + msg.data['funcName']];
+    if (!func) throw 'invalid worker function to call: ' + msg.data['funcName'];
+    var data = msg.data['data'];
+    if (data) {
+      if (!data.byteLength) data = new Uint8Array(data);
+      if (!buffer || bufferSize < data.length) {
+        if (buffer) _free(buffer);
+        bufferSize = data.length;
+        buffer = _malloc(data.length);
+      }
+      HEAPU8.set(data, buffer);
+    }
+
+    workerResponded = false;
+    workerCallbackId = msg.data['callbackId'];
+    if (data) {
+      func(buffer, data.length);
+    } else {
+      func(0, 0);
+    }
+  }
+})();
 
 
 
