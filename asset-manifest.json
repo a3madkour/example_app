@@ -1,22 +1,22 @@
 {
   "files": {
     "main.css": "/example_app/static/css/main.ff7ec583.css",
-    "main.js": "/example_app/static/js/main.775d6a34.js",
-    "static/js/166.e275a440.chunk.js": "/example_app/static/js/166.e275a440.chunk.js",
-    "static/js/264.ac7061e1.chunk.js": "/example_app/static/js/264.ac7061e1.chunk.js",
+    "main.js": "/example_app/static/js/main.db22581a.js",
+    "static/js/166.e312d3b8.chunk.js": "/example_app/static/js/166.e312d3b8.chunk.js",
+    "static/js/264.f9593716.chunk.js": "/example_app/static/js/264.f9593716.chunk.js",
     "static/js/787.c3b18a7b.chunk.js": "/example_app/static/js/787.c3b18a7b.chunk.js",
-    "static/js/780.1cdb4407.chunk.js": "/example_app/static/js/780.1cdb4407.chunk.js",
-    "static/media/quick_example.wasm": "/example_app/static/media/quick_example.2d2be0d9e01885898cea.wasm",
+    "static/js/780.b679b7ff.chunk.js": "/example_app/static/js/780.b679b7ff.chunk.js",
+    "static/media/quick_example.wasm": "/example_app/static/media/quick_example.a58cbf168125064697af.wasm",
     "index.html": "/example_app/index.html",
     "main.ff7ec583.css.map": "/example_app/static/css/main.ff7ec583.css.map",
-    "main.775d6a34.js.map": "/example_app/static/js/main.775d6a34.js.map",
-    "166.e275a440.chunk.js.map": "/example_app/static/js/166.e275a440.chunk.js.map",
-    "264.ac7061e1.chunk.js.map": "/example_app/static/js/264.ac7061e1.chunk.js.map",
+    "main.db22581a.js.map": "/example_app/static/js/main.db22581a.js.map",
+    "166.e312d3b8.chunk.js.map": "/example_app/static/js/166.e312d3b8.chunk.js.map",
+    "264.f9593716.chunk.js.map": "/example_app/static/js/264.f9593716.chunk.js.map",
     "787.c3b18a7b.chunk.js.map": "/example_app/static/js/787.c3b18a7b.chunk.js.map",
-    "780.1cdb4407.chunk.js.map": "/example_app/static/js/780.1cdb4407.chunk.js.map"
+    "780.b679b7ff.chunk.js.map": "/example_app/static/js/780.b679b7ff.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.ff7ec583.css",
-    "static/js/main.775d6a34.js"
+    "static/js/main.db22581a.js"
   ]
 }
